@@ -15,6 +15,13 @@ const App = () => {
     { combination: [2, 4, 6], type: "diagonal-right-to-left", indices: [2, 4, 6] },
   ];
 
+  // Function to play sounds
+  const playSound = (sound) => {
+    const audio = new Audio(`/sounds/${sound}.wav`);
+    audio.play();
+  };
+
+  // Function to determine the winner
   function getWinner(squares) {
     for (const { combination, type, indices } of winningCombinations) {
       const [a, b, c] = combination;
@@ -37,13 +44,18 @@ const App = () => {
     updatedBoard[index] = isXTurn ? "X" : "O";
     setBoard(updatedBoard);
     setIsXTurn(!isXTurn);
+    playSound('placeMove'); // Play sound when a move is placed
   };
 
   function getGameStatus() {
     const winner = getWinner(board);
-    if (winner) return `Winner is ${board[winner.indices[0]]}`;
+    if (winner) {
+      playSound('win'); // Play sound when someone wins
+      return `Winner is ${board[winner.indices[0]]}`;
+    }
 
     if (board.every((squares) => squares !== null)) {
+      playSound('draw'); // Play sound when it's a draw
       return `It's a Draw`;
     }
 
